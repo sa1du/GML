@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GML 9C — Футбол</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f5f5;
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* HEADER */
+  header {
+    background: #1a1a1a;
+    color: white;
+    padding: 28px 24px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-icon { font-size: 40px; flex-shrink: 0; }
+
+  header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+
+  header h1 span {
+    color: #4ade80;
+  }
+
+  header p {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  /* SUMMARY CARDS */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .s-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #e5e5e5;
+  }
+
+  .s-card .num {
+    font-size: 28px;
+    font-weight: 900;
+    color: #1a1a1a;
+  }
+
+  .s-card .lbl {
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  /* TOP 3 */
+  .top3 {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #999;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .top3-list { padding: 8px 0; }
+
+  .top3-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px;
+  }
+
+  .top3-row:not(:last-child) { border-bottom: 1px solid #f5f5f5; }
+
+  .medal { font-size: 24px; width: 32px; text-align: center; flex-shrink: 0; }
+
+  .t3-name { font-size: 16px; font-weight: 700; flex: 1; }
+  .t3-detail { font-size: 13px; color: #999; }
+
+  .t3-pts {
+    font-size: 26px;
+    font-weight: 900;
+    color: #1a1a1a;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  /* FULL TABLE */
+  .table-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #aaa;
+    background: #fafafa;
+    border-bottom: 1px solid #efefef;
+  }
+
+  th.c, td.c { text-align: center; }
+
+  tbody tr { border-bottom: 1px solid #f5f5f5; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafafa; }
+
+  td { padding: 12px 16px; font-size: 14px; vertical-align: middle; }
+
+  .rank { font-size: 13px; color: #bbb; font-weight: 600; width: 28px; }
+  .rank.top { color: #1a1a1a; font-weight: 800; }
+
+  .name { font-weight: 600; font-size: 15px; }
+
+  .goals { font-weight: 700; color: #1a1a1a; }
+  .assists { color: #666; }
+
+  .pts { font-weight: 800; font-size: 17px; }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  .tag-new { background: #dcfce7; color: #16a34a; }
+  .tag-og  { background: #fee2e2; color: #dc2626; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 13px;
+    color: #bbb;
+  }
+
+  footer strong { color: #666; }
+
+  @media (max-width: 480px) {
+    .t3-detail { display: none; }
+    td, th { padding: 10px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-icon">⚽</div>
+    <div>
+      <h1>GML <span>9C</span></h1>
+      <p>Статистика · Футбол</p>
+    </div>
+  </header>
+
+  <div class="summary">
+    <div class="s-card">
+      <div class="num" id="s-players">18</div>
+      <div class="lbl">Игроков</div>
+    </div>
+    <div class="s-card">
+      <div class="num" id="s-goals">—</div>
+      <div class="lbl">Голов</div>
+    </div>
+    <div class="s-card">
+      <div class="num" id="s-assists">—</div>
+      <div class="lbl">Ассистов</div>
+    </div>
+  </div>
+
+  <div class="top3">
+    <div class="section-title">Топ-3</div>
+    <div class="top3-list">
+      <div class="top3-row">
+        <div class="medal">🥇</div>
+        <div>
+          <div class="t3-name">Нурик</div>
+          <div class="t3-detail">44 гол + 16 асс</div>
+        </div>
+        <div class="t3-pts">60</div>
+      </div>
+      <div class="top3-row">
+        <div class="medal">🥈</div>
+        <div>
+          <div class="t3-name">Марго</div>
+          <div class="t3-detail">33 гол + 15 асс</div>
+        </div>
+        <div class="t3-pts">48</div>
+      </div>
+      <div class="top3-row">
+        <div class="medal">🥉</div>
+        <div>
+          <div class="t3-name">Алих</div>
+          <div class="t3-detail">34 гол + 11 асс</div>
+        </div>
+        <div class="t3-pts">45</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="section-title">Все игроки</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Имя</th>
+          <th class="c">⚽ Голы</th>
+          <th class="c">🎯 Ассисты</th>
+          <th class="c">Очки</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    Сезон 2024–2025 · <strong>GML 9C</strong>
+  </footer>
+
+</div>
+
+<script>
+const players = [
+  { rank: 1,  name: "Нурик",    goals: 44, assists: 16, up: true  },
+  { rank: 2,  name: "Марго",    goals: 33, assists: 15, up: true  },
+  { rank: 3,  name: "Алих",     goals: 34, assists: 11, up: true  },
+  { rank: 4,  name: "Айбын",    goals: 10, assists: 24, up: true  },
+  { rank: 5,  name: "Алидар",   goals: 24, assists: 9,  up: true  },
+  { rank: 6,  name: "Сунк",     goals: 22, assists: 12, up: true  },
+  { rank: 7,  name: "Мален",    goals: 7,  assists: 15, up: true  },
+  { rank: 8,  name: "Ерасыл",   goals: 12, assists: 9,  up: true  },
+  { rank: 9,  name: "Темір",    goals: 7,  assists: 13, up: true  },
+  { rank: 10, name: "Акарс",    goals: 11, assists: 7,  up: false },
+  { rank: 11, name: "Алинур",   goals: 5,  assists: 8,  up: true  },
+  { rank: 12, name: "Нуросл",   goals: 1,  assists: 8,  up: false },
+  { rank: 13, name: "Аблай",    goals: 0,  assists: 7,  up: true  },
+  { rank: 14, name: "Зейнолла", goals: 0,  assists: 4,  up: false },
+  { rank: 15, name: "Айбар",    goals: 1,  assists: 1,  up: true,  og: true  },
+  { rank: 16, name: "Айдосик",  goals: 0,  assists: 1,  isNew: true },
+  { rank: 17, name: "Ракыш",    goals: 0,  assists: 1,  og: true  },
+  { rank: 18, name: "Ерка",     goals: 0,  assists: 1,  og: true  },
+];
+
+let totalGoals = 0, totalAssists = 0;
+const tbody = document.getElementById('tbody');
+
+players.forEach(p => {
+  const pts = p.goals + p.assists;
+  totalGoals += p.goals;
+  totalAssists += p.assists;
+
+  const isTop = p.rank <= 3;
+  const tags = [];
+  if (p.isNew) tags.push(`<span class="tag tag-new">новый</span>`);
+  if (p.og) tags.push(`<span class="tag tag-og">авт.гол</span>`);
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="rank ${isTop ? 'top' : ''}">${p.rank}</td>
+    <td class="name">${p.name}${tags.join('')}</td>
+    <td class="goals c">${p.goals}</td>
+    <td class="assists c">${p.assists}</td>
+    <td class="pts c">${pts}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+document.getElementById('s-goals').textContent = totalGoals;
+document.getElementById('s-assists').textContent = totalAssists;
+</script>
+</body>
+</html>
